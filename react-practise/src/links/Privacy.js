@@ -1,8 +1,10 @@
 import React from 'react'
+import Header from "../components/Header.jsx";
+
 
 const Privacy = () => {
   return (
-    <div>id like some of that</div>
+    <Header/>
   )
 }
 

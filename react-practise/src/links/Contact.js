@@ -1,8 +1,10 @@
 import React from 'react'
+import Header from "../components/Header.jsx";
+
 
 const Contact = () => {
   return (
-    <div>do not contact me</div>
+    <Header/>
   )
 }
 

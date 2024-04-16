@@ -1,8 +1,10 @@
 import React from 'react'
+import Header from "../components/Header.jsx";
+
 
 const About = () => {
   return (
-    <div>what are you doing here</div>
+    <Header/>
   )
 }
 

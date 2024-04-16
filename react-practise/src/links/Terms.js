@@ -1,8 +1,10 @@
 import React from 'react'
+import Header from "../components/Header.jsx";
+
 
 const Terms = () => {
   return (
-    <div>come to terms with leaving</div>
+    <Header/>
   )
 }
 

@@ -1,8 +1,10 @@
 import React from 'react'
+import Header from "../components/Header.jsx";
+
 
 const Blog = () => {
   return (
-    <div>i aint got no blog</div>
+    <Header/>
   )
 }
 

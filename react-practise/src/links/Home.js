@@ -1,10 +1,14 @@
 import React from 'react'
 import Header from "../components/Header.jsx";
+import Background from '../components/Background.jsx';
 
 
 const Home = () => {
   return (
-    <Header/>
+    <div>
+      <Header/>
+      <Background/>
+    </div>
   )
 }
 
