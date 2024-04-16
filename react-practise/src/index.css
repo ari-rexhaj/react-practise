@@ -41,6 +41,7 @@ code {
 }
 
 .headertext {
+  text-decoration: none;
   color: #FFF;
   font-family: Urbanist;
   font-size: 12px;
@@ -116,6 +117,7 @@ code {
   display: flex;
   padding: 12px 46px;
   align-items: flex-start;
+  font-family: Urbanist;
 
   border-radius: 50px;
   background: #0094FF;

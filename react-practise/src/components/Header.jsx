@@ -1,5 +1,5 @@
 import React from 'react'
-import {ReactComponent as Logo} from "../assets/imgs/Vector.svg";
+import {ReactComponent as Logo} from "../assets/vectors/Vector.svg";
 
 
 function Header() {
@@ -9,21 +9,13 @@ function Header() {
 
       <div className="link_flexbox">
 
-        <div className='headertext'>
-          <a href='/'>HOME</a>
-        </div>
+          <a href='/' className='headertext'>HOME</a>
 
-        <div className='headertext'>
-          <a href='blog'>BLOG</a>
-        </div>
+          <a href='blog' className='headertext'>BLOG</a>
 
-        <div className='headertext'>
-          <a href='about'>ABOUT</a>
-        </div>
+          <a href='about' className='headertext'>ABOUT</a>
 
-        <div className='headertext'>
-          <a href='contact'>CONTACT</a>
-        </div>
+          <a href='contact' className='headertext'>CONTACT</a>
 
       </div>
     </div>

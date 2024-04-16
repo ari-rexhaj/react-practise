@@ -4,7 +4,10 @@ import Header from "../components/Header.jsx";
 
 const Blog = () => {
   return (
-    <Header/>
+    <div>
+      <Header/>
+      <p>i dont got no blog bruh</p>
+    </div>
   )
 }
 
