@@ -10,7 +10,7 @@ const Background = () => {
             </div>
 
             <div className='newsletterwrapper'>   {/*newspaper sign up thingy, does not need to work*/}
-                <input className="heroinput"></input>
+                <input className="heroinput" placeholder='Enter your email'></input>
                 <button className="herobutton">Subscribe</button>
             </div>
         </div>

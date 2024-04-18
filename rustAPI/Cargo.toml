@@ -1,0 +1,10 @@
+[package]
+mysql ="*"
+rocket = "0.4.5"
+dotenv = "0.15.0"
+chrono="0.4.24"
+serde = { version = "1.0.0", features = ["derive"] }
+
+[dependencies.rocket_contrib]
+version = "0.4.11"
+features = ["handlebars_templates", "tera_templates"]
