@@ -18,6 +18,23 @@ let allPosts_metadata = [  //this data will probably get called from the backend
 ["23 January 2024","marketing","if you are only seeing one of this blog, THEN YES!!!!"]
 ]
 
+let APIallPost_metadata = fetch('http://localhost:3001/getPosts', {
+  method:'GET'
+})
+.then(response => {
+  if(!response.ok) {
+    throw new Error("network response NO GOOD")
+  }
+  else{
+    return response.json();
+  }
+})
+.then(data => {
+  return data
+})
+
+console.log(APIallPost_metadata)
+
 const Home = () => {
   const [filterValue, Setfilter] = useState("all");
   
@@ -71,4 +88,8 @@ function postgenerator(metadatalist, filter) {
     rowList.push(<div className="row">{rowItems}</div>);
   }
   return rowList
+}
+
+function newpostgenerator(metdatalist,filter) {
+  //this one will use the API
 }

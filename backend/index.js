@@ -3,9 +3,16 @@ const bodyParser = require("body-parser");
 const {Client} = require("pg");
 const app = express();
 
-const port = process.env.PORT || 3006;
+const port = process.env.PORT || 3001;
 
-app.use(bodyParser.json());
+app.use(
+    bodyParser.json(),
+    function (req,res,next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 const client = new Client({
     host: "dpg-coj187gl5elc73dffv70-a.frankfurt-postgres.render.com",
@@ -40,10 +47,12 @@ app.get("/Status", async (req,res) => {
 //make a get posts (GET)
 app.get("/getPosts", async (req,res) => {
     console.log("getPosts called")
-    client.query("TABLE posts", (error, response) => {
+
+    client.query("SELECT * FROM posts ORDER BY id ASC", (error, response) => {
         if (!error) {
             console.log("getPosts success")
             res.send(response.rows)
+
         }
         else {
             console.log("getPosts fail")
@@ -58,20 +67,27 @@ app.get("/getPosts", async (req,res) => {
 //not with the 'includetags' bool
 app.get("/searchPostsByText/:includetags", async (req,res) => {
     console.log("searchPostsByText called")
+    //fetch the search that the user inputted
     let substring = req.body["search"].toLowerCase();
+    //variable for if the user would like to include tags in the search results
     let includetags = req.params.includetags
 
+    //first just give me all of the results (probably not a good implementation for real projects)
     client.query('SELECT * FROM posts', (error,result) => {
+        
         if (!error) {
             let matchList = []; //list of matches
             let postList = result.rows;
-            
+        
+            //loops over all the posts, checking if it includes the search that the user inputted.
+            //if the user also wants to include tags results, it will check for an identicial match to the tag name
             for (let i = 0; i < postList.length; i++) {
                 if (postList[i]["title"].toLowerCase().includes(substring) || (includetags === "true" && postList[i]["tag"].toLowerCase() == substring)) {
                     matchList.push(postList[i])
                 }
             }
             
+            //sends a list of all matches
             console.log("searchPostsByText success");
             res.send(matchList)
         }
