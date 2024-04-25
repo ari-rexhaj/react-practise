@@ -4,8 +4,12 @@ import Header from "../components/Header.jsx";
 
 const About = () => {
   return (
-    <Header/>
+    <div>
+      <Header/>
+      
+    </div>
   )
 }
 
 export default About
+

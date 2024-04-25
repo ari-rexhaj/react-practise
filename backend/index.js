@@ -40,13 +40,13 @@ function isNumber(x, noStr) {
 // and ill probably learn how to not get fucked later, for now it does not matter
 
 app.get("/Status", async (req,res) => {
-    console.log("Status called")
+    console.log("\nStatus called")
     res.send({"status":"GOOD"})
 })
 
 //make a get posts (GET)
 app.get("/getPosts", async (req,res) => {
-    console.log("getPosts called")
+    console.log("\ngetPosts called")
 
     client.query("SELECT * FROM posts ORDER BY id ASC", (error, response) => {
         if (!error) {
@@ -66,7 +66,7 @@ app.get("/getPosts", async (req,res) => {
 // you will by default search for titles and can choose to include tags or
 //not with the 'includetags' bool
 app.get("/searchPostsByText/:includetags", async (req,res) => {
-    console.log("searchPostsByText called")
+    console.log("\nsearchPostsByText called")
     //fetch the search that the user inputted
     let substring = req.body["search"].toLowerCase();
     //variable for if the user would like to include tags in the search results
@@ -101,7 +101,7 @@ app.get("/searchPostsByText/:includetags", async (req,res) => {
 //adds a post to the database, I think if you do not format the request body
 //correctly you will end up with undefined, soooooooo.... DO IT RIGHT
 app.post("/addPost", async (req,res) => {
-    console.log("addPost called");
+    console.log("\naddPost called");
     //preparing the variables
     let data = req.body;
     let date = data["date"]
@@ -128,7 +128,7 @@ app.post("/addPost", async (req,res) => {
 //adding the index i do it using the $ to add in the quotation marks. Which works
 //for seemingly all cases
 app.get("/getSpecificPosts/:type/:index", async (req,res) => {
-    console.log("getSpecificPosts called");
+    console.log("\ngetSpecificPosts called");
     let type = req.params.type
     let index = req.params.index
         
@@ -150,7 +150,7 @@ app.get("/getSpecificPosts/:type/:index", async (req,res) => {
 //Maybe its because theres no checks making sure the formatting is correct, 
 //the API plugs the values in without thought.
 app.put("/updatePost/:id", async (req,res) => {
-    console.log("updatePost called");
+    console.log("\nupdatePost called");
     //saves the different variables, this is very unstable since you can write whatever you want as the value to these things
     let data = req.body
     let date = data["date"]
@@ -181,7 +181,7 @@ app.put("/updatePost/:id", async (req,res) => {
 //works pretty well, will only update the given tag and index, does not 
 //support multiple values atm, because im not THAT good yet
 app.patch("/updatePostValue/:id", async (req,res) => {
-    console.log("updatePostValue called");
+    console.log("\nupdatePostValue called");
     let id = req.params.id;
     let data = JSON.stringify(req.body);
     data = data.replace("{","").replace("}","").replaceAll('"','').split(":")   //some data parcing, converts the json into an array with the tag and the index
@@ -204,7 +204,7 @@ app.patch("/updatePostValue/:id", async (req,res) => {
 //that post id will never be used again thanks to earlier systems, although 
 //this is not a big deal, my OCD does not enjoy this
 app.delete("/deletePost/:id", async (req,res) => {
-    console.log("deletePost called")
+    console.log("\ndeletePost called")
     let id = req.params.id
 
     if (!isNumber(id)) {

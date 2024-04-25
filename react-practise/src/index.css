@@ -15,17 +15,10 @@ code {
 .header {
   position: absolute;
   display: flex;
-  width: 1836px; /*this solution sucks ASS, issue is because im stupid*/
+  width: calc(100% - 80px); /*this solution sucks ASS, issue is because im stupid*/
   padding: 25px 40px;
   justify-content: space-between;
   align-items: center;
-}
-
-.background {
-  z-index: -1;
-  width: 100%;
-  height: 931px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%), url(./assets/imgs/background.jpg) lightgray 50% / cover no-repeat;
 }
 
 .Logo {
@@ -59,7 +52,33 @@ code {
   text-transform: uppercase;
 }
 
+.headertext:hover {
+  text-decoration: underline;
+}
+
+.background {
+  z-index: -1;
+  width: 100%;
+  height: 931px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%), url(./assets/imgs/background.jpg) lightgray 50% / cover no-repeat;
+
+  align-items: center;
+  display:flex;
+  justify-content: center;
+}
+
+.herowrapper {    
+position: relative;
+
+display: flex;
+width: 700px;
+flex-direction: column;
+align-items: center;
+gap: 30px;
+}
+
 .smallherotext {
+  margin:0;
   color: #FFF;
   text-align: center;
   font-family: Urbanist;
@@ -80,19 +99,6 @@ code {
   font-style: normal;
   font-weight: 500;
   line-height: 58px; /* 107.407% */
-}
-  
-.herowrapper {    
-  position: absolute;
-  left: 608px;
-  top: 313px;
-
-  display: flex;
-  width: 700px;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-
 }
 
 .herotextcontainer {
@@ -124,13 +130,24 @@ code {
 .herobutton {
   color: #FFF;
   display: flex;
+  height: 42px;
   padding: 12px 46px;
   align-items: flex-start;
   font-family: Urbanist;
-
   border-radius: 50px;
   border: none;
+
+  transition: 0.3s;
   background: #0094FF;
+}
+
+
+.herobutton:hover {
+  background: #006dbb;
+}
+
+.herobutton:active {
+  background-color: #2ea8ff;
 }
 
 .section {
@@ -159,6 +176,7 @@ code {
   line-height: 44px; /* 115.789% */
 }
 
+
 .filtercontainer {
   display: flex;
   justify-content: center;
@@ -166,7 +184,16 @@ code {
   gap: 50px;
 }
 
+.filtercontainer:hover:not(:has(.filteroptions:hover)) >.filteroptions {
+  text-decoration: underline;
+}
+
+.filtercontainer:hover:has(.filteroptions:hover) > .filteroptions:not(:hover) {
+  color: grey;
+}
+
 .filteroptions {  /*make the selected filter have an underline later*/
+  transition: 100ms;
   color: #1B1B1B;
   font-family: Urbanist;
   font-size: 19px;
@@ -175,6 +202,15 @@ code {
   line-height: normal;
   text-transform: uppercase;
   margin: 0px;
+}
+
+.filteroptions:hover {  /*make the selected filter have an underline later*/
+  text-decoration: underline;
+}
+
+.filteroptions:active {
+  color:#3f8cff;
+  text-decoration:none;
 }
 
 .content {
@@ -188,9 +224,24 @@ code {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: 30px;
   width: 100%;
 }
+
+.post img{
+  transition: 0.1s;
+  outline-style:ridge;
+  outline-color: #663399;
+  outline-width: 0px;  
+}
+.post img:hover {
+  transition: 0.3s;
+  outline-style:double;
+  outline-color: #663399;
+  outline-width: 5px;  
+}
+
 
 .post{
   display: flex;
@@ -205,7 +256,8 @@ code {
   width: 100%;
   align-items: flex-start;
   gap: 30px;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .blogpost_metadata {
@@ -227,7 +279,15 @@ code {
   font-weight: 600;
   line-height: 32px; /* 160% */
   margin: 0px;
+  transition: 0.1s;
 }
+
+.blogpost_title:hover {
+  transition: 0.3s;
+  font-size: 30px;
+  margin-bottom: 0px;
+}
+
 
 .blogpost_content {
   display: flex;
@@ -239,7 +299,7 @@ code {
 
 .footerwrapper{
   display: flex;
-  width: 1716px;
+  width: calc(100% - 200px);
   padding: 50px 100px 40px 100px;
   flex-direction: column;
   align-items: flex-start;
