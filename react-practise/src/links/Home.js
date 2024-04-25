@@ -4,6 +4,9 @@ import Background from '../components/Background.jsx';
 import Blogpost from '../components/Blogpost.jsx';
 import Footer from '../components/Footer.jsx';
 import {useState, useEffect} from "react"
+import axios from 'axios'
+
+let backend = "http://localhost:3002"
 
 const Home = () => {
   const [filterValue, Setfilter] = useState("all");
@@ -14,42 +17,28 @@ const Home = () => {
   
   const [postData,setPosts] = useState();
   useEffect(() => {
-if(filterValue === "all"){
-  fetch('http://localhost:3002/getPosts')
     
-  .then(response => {
-    if(!response.ok) {
-      throw new Error("getPosts network response not ok")
+  if(filterValue === "all"){
+    axios.get(backend+'/getPosts')
+      .then((response) => {
+        setPosts(response.data)
+        console.log("getPosts success")
+      })
+      .catch((error) => {
+        console.error("axios failed to fetch getPosts\n",error)
+      })
+    
     }
-    return response.json();
-  })
-  
-  .then(data => {
-    setPosts(data);
-  })
-  
-  .catch(error => {
-    console.error('getPosts failed to fetch',error)
-  });
-}
-else {
-  fetch(`http://localhost:3002/getSpecificPosts/tag/${filterValue}`)
-    
-    .then(response => {
-      if(!response.ok) {
-        throw new Error("getPosts network response not ok")
-      }
-      return response.json();
-    })
-    
-    .then(data => {
-      setPosts(data);
-    })
-    
-    .catch(error => {
-      console.error('getPosts failed to fetch',error)
-    });
-}
+  else {
+    axios.get(backend+`/getSpecificPosts/tag/${filterValue}`)
+      .then((response) => {
+        setPosts(response.data)
+        console.log("getSpecificPosts success")
+      })
+      .catch((error) => {
+        console.error("axios failed to fetch getSpecificPosts\n",error)
+      })
+  }
     
   },[filterValue]);
 

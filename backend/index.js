@@ -215,7 +215,7 @@ app.patch("/updatePostValue/:id", async (req,res) => {
     console.log("\nupdatePostValue called",new Date());
     let id = req.params.id;
     let data = JSON.stringify(req.body);
-    data = data.replace("{","").replace("}","").replaceAll('"','').split(":")   //some data parcing, converts the json into an array with the tag and the index
+    data = data.replace("{","").replace("}","").replaceAll('"','').split(/:(.*)/s)   //some data parcing, converts the json into an array with the tag and the index
 
     //querying, doing it the same way as always although im not sure if its neccessary here. BUT IF IT WORKS; DONT TOUCH IT!
     //we are saying update the given Key-value (where data[0] refers to the key) with the given index (where data[1] refers to the value) for post with the given id, incase youre curious
@@ -254,7 +254,3 @@ app.delete("/deletePost/:id", async (req,res) => {
         }
     })
 })
-
-// write more as you come up with them
-
-//optional: sort by date

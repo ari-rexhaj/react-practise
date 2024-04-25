@@ -9,7 +9,7 @@ const Blogpost = ({date,tag,title,imgurl}) => {
   
   return (
     <div className='post'>
-      <img src={imgurl} alt="invalid img url"  width="552" height="357.25"></img>
+      <img src={imgurl} alt="invalid img url"></img>
       <div className="blogpost_content">
         <div className="blogpost_infowrapper">
           <p className='blogpost_metadata'>{date}</p>
