@@ -15,7 +15,7 @@ const Home = () => {
   const [postData,setPosts] = useState();
   useEffect(() => {
 if(filterValue === "all"){
-  fetch('http://localhost:3001/getPosts')
+  fetch('http://localhost:3002/getPosts')
     
   .then(response => {
     if(!response.ok) {
@@ -33,7 +33,7 @@ if(filterValue === "all"){
   });
 }
 else {
-  fetch(`http://localhost:3001/getSpecificPosts/tag/${filterValue}`)
+  fetch(`http://localhost:3002/getSpecificPosts/tag/${filterValue}`)
     
     .then(response => {
       if(!response.ok) {
@@ -71,7 +71,7 @@ else {
        <div className='row'>
        {
         postData?.map((data) =>(
-          <Blogpost date={data?.date} tag={data?.tag} title={data?.title} key={data?.id}/>
+          <Blogpost date={data?.date} tag={data?.tag} title={data?.title} imgurl={data?.thumbnail} key={data?.id}/>
         ))
        }
        </div>

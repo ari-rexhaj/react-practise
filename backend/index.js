@@ -1,9 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const {Client} = require("pg");
+const EventEmitter = require("events")
 const app = express();
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3002;
+const myEmitter = new EventEmitter();
+
+myEmitter.on("error",(err) => {
+    console.error("an Error occoured:",err)
+})
 
 app.use(
     bodyParser.json(),
@@ -35,24 +41,47 @@ function isNumber(x, noStr) {
     ) || false;
 };
 
+function sortByDate(rowlist) {
+    //im sure there are better methods for doing this, but i wanted to
+//attempt sorting the dates on my own, even though i did indeed need
+//to read up on how to sort the hashmap and such.
+let map = new Map()
+//start looping over response.rows
+for(let i = 0; i < rowlist.length; i++) {
+    //split the date string into a list which containts the strings
+    //that represent day, month and year respectively
+    let dateinfo = rowlist[i]["date"].split("-")
+    //we do some math to get the exact day of the post formatted as 
+    //days since the first day in our time system
+    let time = parseInt(dateinfo[0]) + (parseInt(dateinfo[1]) * 30) + (parseInt(dateinfo[2] * 365))
+    //put into a hashmap where the key is the current row we are 
+    //working with and the value is the earlier calculated day
+    map.set(rowlist[i],time)
+}
+//sort the hashmap based on the value
+let newmap = new Map([...map.entries()].sort((a,b) => b[1] - a[1]))
+//send the keys of the hashmap (remember this was the rows)
+//as a list to the caller
+return [...newmap.keys()]
+}
+
 //APIs need to be foolproof because I HOLD MYSELF TO HIGH STANDARDS (idk if its foolproof)
 // if you can SQL inject than thats just a L, i know what it is, i dont know how to do anything about it,
 // and ill probably learn how to not get fucked later, for now it does not matter
 
 app.get("/Status", async (req,res) => {
-    console.log("\nStatus called")
+    console.log("\nStatus called",new Date())
     res.send({"status":"GOOD"})
 })
 
 //make a get posts (GET)
 app.get("/getPosts", async (req,res) => {
-    console.log("\ngetPosts called")
+    console.log("\ngetPosts called",new Date())
 
-    client.query("SELECT * FROM posts ORDER BY id ASC", (error, response) => {
+    client.query("SELECT * FROM posts", (error, response) => {
         if (!error) {
+            res.send(sortByDate(response.rows))
             console.log("getPosts success")
-            res.send(response.rows)
-
         }
         else {
             console.log("getPosts fail")
@@ -66,7 +95,7 @@ app.get("/getPosts", async (req,res) => {
 // you will by default search for titles and can choose to include tags or
 //not with the 'includetags' bool
 app.get("/searchPostsByText/:includetags", async (req,res) => {
-    console.log("\nsearchPostsByText called")
+    console.log("\nsearchPostsByText called",new Date())
     //fetch the search that the user inputted
     let substring = req.body["search"].toLowerCase();
     //variable for if the user would like to include tags in the search results
@@ -89,7 +118,7 @@ app.get("/searchPostsByText/:includetags", async (req,res) => {
             
             //sends a list of all matches
             console.log("searchPostsByText success");
-            res.send(matchList)
+            res.send(sortByDate(matchList))
         }
         else {
             console.log("searchPostsByText failed")
@@ -101,13 +130,14 @@ app.get("/searchPostsByText/:includetags", async (req,res) => {
 //adds a post to the database, I think if you do not format the request body
 //correctly you will end up with undefined, soooooooo.... DO IT RIGHT
 app.post("/addPost", async (req,res) => {
-    console.log("\naddPost called");
+    console.log("\naddPost called",new Date());
     //preparing the variables
     let data = req.body;
     let date = data["date"]
     let tag = data["tag"]
     let title = data["title"]
-    client.query('INSERT INTO posts (date, tag, title) VALUES ($1, $2, $3) RETURNING id', [date, tag, title], (error, result) => {
+    let img = data["thumbnail"]
+    client.query('INSERT INTO posts (date, tag, title,thumbnail) VALUES ($1, $2, $3, $4) RETURNING id', [date, tag, title, img], (error, result) => {
         if (!error) {
             console.log("addPost success");
             const insertedId = result.rows[0].id;
@@ -128,14 +158,14 @@ app.post("/addPost", async (req,res) => {
 //adding the index i do it using the $ to add in the quotation marks. Which works
 //for seemingly all cases
 app.get("/getSpecificPosts/:type/:index", async (req,res) => {
-    console.log("\ngetSpecificPosts called");
+    console.log("\ngetSpecificPosts called",new Date());
     let type = req.params.type
     let index = req.params.index
         
     // if you are wondering whats going on under this comment, let me break it down: https://i.pinimg.com/originals/7a/56/4c/7a564cac06f9b1a48491d8c72b10b0fd.gif
     client.query('SELECT * FROM posts WHERE '+type+' = $1',[index],(error,result) => {
         if(!error && result.rows.length !== 0) {
-            res.send(result.rows);
+            res.send(sortByDate(result.rows));
             console.log("getSpecificPosts success")
         }
         else {
@@ -150,21 +180,22 @@ app.get("/getSpecificPosts/:type/:index", async (req,res) => {
 //Maybe its because theres no checks making sure the formatting is correct, 
 //the API plugs the values in without thought.
 app.put("/updatePost/:id", async (req,res) => {
-    console.log("\nupdatePost called");
+    console.log("\nupdatePost called",new Date());
     //saves the different variables, this is very unstable since you can write whatever you want as the value to these things
     let data = req.body
     let date = data["date"]
     let tag = data["tag"]
     let title = data["title"]
+    let img = data["thumbnail"]
     let id = req.params.id;
 
-    if (data == undefined || date == undefined || tag == undefined || title == undefined) {
+    if (data == undefined || date == undefined || tag == undefined || title == undefined || img == undefined) {
         console.log("updatePost failed due to undefined data, did you format the request correctly?")
-        res.status(500).json({ success: false, message: "error updating post, did you format the body correctly? Remember to define a date, tag and title" });
+        res.status(500).json({ success: false, message: "error updating post, did you format the body correctly? Remember to define a date, tag, title and image url" });
         return
     }
 
-    client.query('UPDATE posts SET date = $1, tag = $2, title = $3 WHERE id = $4',[date,tag,title,id], (error, result) => {
+    client.query('UPDATE posts SET date = $1, tag = $2, title = $3, thumbnail = $4 WHERE id = $5',[date,tag,title,img,id], (error, result) => {
         if (!error) {
             console.log("updatePost success")
             res.json({ success: true, message: "Post updated successfully"});
@@ -181,7 +212,7 @@ app.put("/updatePost/:id", async (req,res) => {
 //works pretty well, will only update the given tag and index, does not 
 //support multiple values atm, because im not THAT good yet
 app.patch("/updatePostValue/:id", async (req,res) => {
-    console.log("\nupdatePostValue called");
+    console.log("\nupdatePostValue called",new Date());
     let id = req.params.id;
     let data = JSON.stringify(req.body);
     data = data.replace("{","").replace("}","").replaceAll('"','').split(":")   //some data parcing, converts the json into an array with the tag and the index
@@ -204,7 +235,7 @@ app.patch("/updatePostValue/:id", async (req,res) => {
 //that post id will never be used again thanks to earlier systems, although 
 //this is not a big deal, my OCD does not enjoy this
 app.delete("/deletePost/:id", async (req,res) => {
-    console.log("\ndeletePost called")
+    console.log("\ndeletePost called",new Date())
     let id = req.params.id
 
     if (!isNumber(id)) {

@@ -1,10 +1,15 @@
 import React from 'react'
 
 /*dont forget to make clickable later... please*/
-const Blogpost = ({date,tag,title}) => {  
+const Blogpost = ({date,tag,title,imgurl}) => {
+  
+  if (imgurl === null || imgurl === "") {
+    imgurl = "../assets/imgs/Image.png"
+  }
+  
   return (
     <div className='post'>
-      <img src="../assets/imgs/Image.png" alt="2 racially diverse women"></img>
+      <img src={imgurl} alt="invalid img url"  width="552" height="357.25"></img>
       <div className="blogpost_content">
         <div className="blogpost_infowrapper">
           <p className='blogpost_metadata'>{date}</p>
