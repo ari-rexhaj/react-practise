@@ -6,7 +6,7 @@ import Footer from '../components/Footer.jsx';
 import {useState, useEffect} from "react"
 import axios from 'axios'
 
-let backend = "http://localhost:3002"
+let backend = "http://localhost:3001"
 
 const Home = () => {
   const [filterValue, Setfilter] = useState("all");
@@ -27,7 +27,7 @@ const Home = () => {
       .catch((error) => {
         console.error("axios failed to fetch getPosts\n",error)
       })
-    
+
     }
   else {
     axios.get(backend+`/getSpecificPosts/tag/${filterValue}`)

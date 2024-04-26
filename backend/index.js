@@ -4,7 +4,7 @@ const {Client} = require("pg");
 const EventEmitter = require("events")
 const app = express();
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3001;
 const myEmitter = new EventEmitter();
 
 myEmitter.on("error",(err) => {
@@ -42,7 +42,7 @@ function isNumber(x, noStr) {
 };
 
 function sortByDate(rowlist) {
-    //im sure there are better methods for doing this, but i wanted to
+//im sure there are better methods for doing this, but i wanted to
 //attempt sorting the dates on my own, even though i did indeed need
 //to read up on how to sort the hashmap and such.
 let map = new Map()
@@ -52,7 +52,8 @@ for(let i = 0; i < rowlist.length; i++) {
     //that represent day, month and year respectively
     let dateinfo = rowlist[i]["date"].split("-")
     //we do some math to get the exact day of the post formatted as 
-    //days since the first day in our time system
+    //total days since the first day in our time system 
+    //(turns into number of days since the date 00/00/0000)
     let time = parseInt(dateinfo[0]) + (parseInt(dateinfo[1]) * 30) + (parseInt(dateinfo[2] * 365))
     //put into a hashmap where the key is the current row we are 
     //working with and the value is the earlier calculated day
