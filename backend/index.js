@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const {Client} = require("pg");
 const EventEmitter = require("events")
 const app = express();
@@ -12,7 +11,6 @@ myEmitter.on("error",(err) => {
 })
 
 app.use(
-    bodyParser.json(),
     function (req,res,next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
