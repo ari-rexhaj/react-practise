@@ -1,6 +1,7 @@
 const express = require("express");
 const {Client} = require("pg");
 const EventEmitter = require("events")
+const bodyParser = require("body-parser")
 const app = express();
 
 const port = process.env.PORT || 3001;
@@ -11,6 +12,7 @@ myEmitter.on("error",(err) => {
 })
 
 app.use(
+    bodyParser.json(),
     function (req,res,next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -214,7 +216,8 @@ app.patch("/updatePostValue/:id", async (req,res) => {
     console.log("\nupdatePostValue called",new Date());
     let id = req.params.id;
     let data = JSON.stringify(req.body);
-    data = data.replace("{","").replace("}","").replaceAll('"','').split(/:(.*)/s)   //some data parcing, converts the json into an array with the tag and the index
+    console.log(req.body)
+    data = data.replace("{","").replace("}","").replaceAll('"','').split(/:(.*)/s)
 
     //querying, doing it the same way as always although im not sure if its neccessary here. BUT IF IT WORKS; DONT TOUCH IT!
     //we are saying update the given Key-value (where data[0] refers to the key) with the given index (where data[1] refers to the value) for post with the given id, incase youre curious
