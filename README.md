@@ -4,7 +4,7 @@
 <h2>How to run and test website project yourself</h2>
 <ol>
   <li>Clone the project into an empty folder</li>
-  <li>Open a terminal change directory (cd) to the folder named "backend"</li>
+  <li>Open a terminal and change directory (cd) to the folder named "backend"</li>
   <li>Run the following into the terminal: <em>npm start</em></li>
   <li>Open a new terminal and change directory (cd) to the folder named "react-practise"</li>
   <li>Run the following into the second terminal: <em>npm start</em></li>
